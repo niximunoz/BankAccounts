@@ -1,0 +1,35 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+@model Transaction
+<h1> Welcome, @Context.Session.GetString("UserEmail")</h1>
+<h2>Current Balance: $ @ViewBag.TotalAmount</h2>
+<form method="POST" asp-controller="Home" asp-action="UpdateBalance">
+    <div class=" mb-3">
+        <label asp-for="Amount" class="form-label"> Deposit / Withdraw: </label>
+        <input asp-for="Amount" class="form-control">
+        <span asp-validation-for="Amount" class="form-text"></span>
+    </div>
+    <div>
+        <input type="hidden" asp-for="UserId" value="@Context.Session.GetInt32("UserId")">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<table class="table table-striped">
+        <thead>
+            <tr>
+                <th> Amount </th>
+                <th> Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var transaction in ViewBag.Transactions)
+            {
+                <tr>
+                    <td> @transaction.Amount</td>
+                    <td> @transaction.CreatedAt</td>
+                </tr>
+            }
+        </tbody>
+    </table>
